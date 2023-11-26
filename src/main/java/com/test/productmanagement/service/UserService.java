@@ -28,20 +28,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    private JwtUtils jwtUtils;
+    public UserService(AuthenticationManager authenticationManager,
+                       JwtUtils jwtUtils,
+                       UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       PasswordEncoder encoder) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils              = jwtUtils;
+        this.userRepository        = userRepository;
+        this.roleRepository        = roleRepository;
+        this.encoder               = encoder;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder encoder;
+    }
 
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
